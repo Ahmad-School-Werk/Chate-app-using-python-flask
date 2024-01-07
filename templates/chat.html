@@ -1,0 +1,40 @@
+{% include 'layout.html' %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - {{ group }}</title>
+</head>
+<body>
+    <h1>Chat - {{ group }}</h1>
+    <div id="chat"></div>
+    <form id="message-form">
+        <input type="text" id="message" autocomplete="off">
+        <button type="submit">Verstuur</button>
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+    <script>
+        var socket = io.connect('http://' + document.domain + ':' + location.port);
+
+        socket.on('message', function(data) {
+            var chatDiv = document.getElementById('chat');
+            var messageDiv = document.createElement('div');
+            messageDiv.innerHTML = '<b>' + data.username + ':</b> ' + data.msg;
+            chatDiv.appendChild(messageDiv);
+        });
+
+        socket.emit('join_room', { 'username': '{{ username }}', 'group': '{{ group }}' });
+
+        document.getElementById('message-form').onsubmit = function(e) {
+            e.preventDefault();
+            var messageInput = document.getElementById('message');
+            var message = messageInput.value;
+            socket.emit('message', { 'username': '{{ username }}', 'msg': message, 'group': '{{ group }}' });
+            messageInput.value = '';
+        };
+    </script>
+</body>
+</html>

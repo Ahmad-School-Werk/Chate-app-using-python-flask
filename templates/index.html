@@ -1,0 +1,36 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <div id="group-container">
+            <h1>Welkom bij de Chat App</h1>
+            <ul>
+                {% for group in groups %}
+                    <li><a href="{{ url_for('chat', group=group, password='password') }}">{{ group }}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div id="chat-container">
+            <h1>Chat</h1>
+
+            <form action="/create_group" method="post">
+        <label for="group_name">Groepsnaam:</label>
+        <input type="text" id="group_name" name="group_name" required>
+        <label for="password">Wachtwoord:</label>
+        <input type="password" id="password" name="password" required>
+        <button type="submit">Maak Groep</button>
+    </form>
+        </div>
+    </div>
+
+    
+</body>
+</html>
